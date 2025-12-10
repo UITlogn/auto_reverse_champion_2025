@@ -347,27 +347,19 @@ def Solve(idx, tryswap_target):
         capture_output=True
     )
     
-    if b"Correct" not in result.stdout:
-        if tryswap_target == 0:
-            tmp = Solve(idx, 1)
-            if tmp == 0:
-                print("Wrong")
-                exit(0)
-        else:
-            print("Wrong")
-            exit(0)
-    
-    # with open(name + '.res', 'w') as f:
-    #     f.write(x.hex())
-    global flag
-    flag += x
-        
-    print('OK')
-    return 1
+    if b"Correct" in result.stdout:
+        return x
+    return b''
 
 
 for i in range(6519):
-    Solve(i, 0)
+    x = Solve(i, 0)
+    if x == b'':
+        x = Solve(i, 1)
+    if x == b'':
+        print('Wrong')
+        exit(0)
+    flag += x
 
-with open('flag', 'wb') as f:
+with open('flag.png', 'wb') as f:
     f.write(flag)
